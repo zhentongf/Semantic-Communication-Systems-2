@@ -99,7 +99,9 @@ class G21(nn.Module):
     def __init__(self, conv_dim=64):
         super(G21, self).__init__()
         # encoding blocks
+        # 32x32x3 input (SVHN RGB)
         self.conv1 = conv(3, conv_dim, 4)  # 3 channel input (SVHN RGB)
+        # 16x16x64 output
         self.conv2 = conv(conv_dim, conv_dim * 2, 4)
 
         # residual blocks
