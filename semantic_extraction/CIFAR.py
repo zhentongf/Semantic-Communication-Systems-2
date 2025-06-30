@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-@author: hongwei zhang
-@contact: zhanghwei@sjtu.edu.cn
-@file: CIFAR.py
-@time: 2022/3/14 12:24
-
 This script implements a deep learning pipeline for CIFAR-10 image classification 
 with compression and noise addition. It uses:
 - A GoogleNet classifier

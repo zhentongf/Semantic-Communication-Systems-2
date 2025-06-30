@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""
-@author: hongwei zhang
-@contact: zhanghwei@sjtu.edu.cn
-@file: MLP_MNIST_model.py
-@time: 2021/12/15 20:38
-"""
+
 # 导入必要的库 / Import necessary libraries
 import torch
 import numpy as np

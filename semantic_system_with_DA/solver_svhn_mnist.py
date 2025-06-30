@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""
-@author: hongwei zhang
-@contact: zhanghwei@sjtu.edu.cn
-@file: solver_svhn_mnist.py
-@time: 2022/3/6 14:31
-"""
+
 import torch
 import torch.nn as nn
 import torchvision
@@ -19,7 +14,7 @@ from torch import optim
 from model_svhn_mnist import G12, G21
 from model_svhn_mnist import D1, D2
 import scipy.misc
-# import imageio
+import imageio
 import torch.nn.functional as F
 import pandas as pd
 import copy
@@ -388,53 +383,62 @@ class Solver(object):
                 if (step + 1) % self.sample_step == 0:
                     # save images
 
-                    # fake_svhn = self.g12(fixed_mnist)
-                    # fake_mnist = self.g21(fixed_svhn)
-                    #
-                    # fake_mnist_reshape = fake_mnist.view(64, -1)
-                    # fake_mnist_reshape = fake_mnist_reshape.to(device)
-                    # out_encoder = mlp_encoder(fake_mnist_reshape)
-                    # out_encoder_reshape = torch.reshape(out_encoder, (64, 1, 28, 28))
-                    #
-                    # mnist, fake_mnist = self.to_data(fixed_mnist), self.to_data(fake_mnist)
-                    # svhn, fake_svhn = self.to_data(fixed_svhn), self.to_data(fake_svhn)
-                    #
-                    # out_encoder_reshape_data = self.to_data(out_encoder_reshape)
-                    #
-                    # # mnist to svhn
-                    # merged = self.merge_images(mnist, fake_svhn)
-                    # path = os.path.join(self.sample_path, 'sample-%d-m-s.png' % (step + 1))
-                    # # scipy.misc.imsave(path, merged)
-                    # imageio.imwrite(path, merged)
-                    # print('saved %s' % path)
-                    #
-                    # # svhn to mnist
-                    # merged = self.merge_images(svhn, fake_mnist)
-                    # path = os.path.join(self.sample_path, 'sample-%d-s-m.png' % (step + 1))
-                    # # scipy.misc.imsave(path, merged)
-                    # imageio.imwrite(path, merged)
-                    # print('saved %s' % path)
-                    #
-                    # merged = self.merge_images_encoder(svhn, fake_mnist, out_encoder_reshape_data)
-                    # path = os.path.join(self.sample_path, 'sample-%d-s-m-encoder.png' % (step + 1))
-                    # # scipy.misc.imsave(path, merged)
-                    # imageio.imwrite(path, merged)
-                    # print('saved %s' % path)
+                    fake_svhn = self.g12(fixed_mnist)
+                    fake_mnist = self.g21(fixed_svhn)
+                    
+                    fake_mnist_reshape = fake_mnist.view(64, -1)
+                    fake_mnist_reshape = fake_mnist_reshape.to(device)
+                    out_encoder = mlp_encoder(fake_mnist_reshape)
+                    out_encoder_reshape = torch.reshape(out_encoder, (64, 1, 28, 28))
+                    
+                    mnist, fake_mnist = self.to_data(fixed_mnist), self.to_data(fake_mnist)
+                    svhn, fake_svhn = self.to_data(fixed_svhn), self.to_data(fake_svhn)
+                    
+                    out_encoder_reshape_data = self.to_data(out_encoder_reshape)
+                    
+                    # mnist to svhn
+                    merged = self.merge_images(mnist, fake_svhn)
+                    path = os.path.join(self.sample_path, 'sample-%d-m-s.png' % (step + 1))
+                    # scipy.misc.imsave(path, merged)
+                    if merged.dtype != np.uint8:
+                        merged = np.clip(merged, 0, 1)  # Only if you know it's in [0, 1]
+                        merged = (merged * 255).astype(np.uint8)
+                    imageio.imwrite(path, merged)
+                    print('saved %s' % path)
+                    
+                    # svhn to mnist
+                    merged = self.merge_images(svhn, fake_mnist)
+                    path = os.path.join(self.sample_path, 'sample-%d-s-m.png' % (step + 1))
+                    # scipy.misc.imsave(path, merged)
+                    if merged.dtype != np.uint8:
+                        merged = np.clip(merged, 0, 1)  # Only if you know it's in [0, 1]
+                        merged = (merged * 255).astype(np.uint8)
+                    imageio.imwrite(path, merged)
+                    print('saved %s' % path)
+                    
+                    merged = self.merge_images_encoder(svhn, fake_mnist, out_encoder_reshape_data)
+                    path = os.path.join(self.sample_path, 'sample-%d-s-m-encoder.png' % (step + 1))
+                    # scipy.misc.imsave(path, merged)
+                    if merged.dtype != np.uint8:
+                        merged = np.clip(merged, 0, 1)  # Only if you know it's in [0, 1]
+                        merged = (merged * 255).astype(np.uint8)
+                    imageio.imwrite(path, merged)
+                    print('saved %s' % path)
 
                     acc_all_np = np.array(self.train_acc)
-                    file = ('./results/acc_svhn_mnist_%.2f.csv' % compression_rate)
+                    file = ('./results/svhn_mnist/acc_svhn_mnist_%.2f.csv' % compression_rate)
                     data = pd.DataFrame(acc_all_np)
                     data.to_csv(file, index=False)
 
                 if (step + 1) % 15000 == 0:
                     # save models
                     # save the model parameters for each epoch
-                    # g12_path = os.path.join(self.model_path, 'g12-%d.pkl' % (step + 1))
-                    # g21_path = os.path.join(self.model_path, 'g21-%d.pkl' % (step + 1))
-                    # d1_path = os.path.join(self.model_path, 'd1-%d.pkl' % (step + 1))
-                    # d2_path = os.path.join(self.model_path, 'd2-%d.pkl' % (step + 1))
-                    # torch.save(self.g12.state_dict(), g12_path)
-                    # torch.save(self.g21.state_dict(), g21_path)
-                    # torch.save(self.d1.state_dict(), d1_path)
-                    # torch.save(self.d2.state_dict(), d2_path)
+                    g12_path = os.path.join(self.model_path, 'g12-%d.pkl' % (step + 1))
+                    g21_path = os.path.join(self.model_path, 'g21-%d.pkl' % (step + 1))
+                    d1_path = os.path.join(self.model_path, 'd1-%d.pkl' % (step + 1))
+                    d2_path = os.path.join(self.model_path, 'd2-%d.pkl' % (step + 1))
+                    torch.save(self.g12.state_dict(), g12_path)
+                    torch.save(self.g21.state_dict(), g21_path)
+                    torch.save(self.d1.state_dict(), d1_path)
+                    torch.save(self.d2.state_dict(), d2_path)
                     break

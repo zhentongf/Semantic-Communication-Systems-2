@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""
-@author: hongwei zhang
-@contact: zhanghwei@sjtu.edu.cn
-@file: MNIST.py
-@time: 2021/12/29 21:36
-"""
+
 
 import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"  # Optionally specify GPU

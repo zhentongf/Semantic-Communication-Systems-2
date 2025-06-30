@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""
-@author: hongwei zhang
-@contact: zhanghwei@sjtu.edu.cn
-@file: main_svhn_mnist.py
-@time: 2022/3/6 14:25
-"""
+
 import argparse
 import os
 from solver_svhn_mnist import Solver

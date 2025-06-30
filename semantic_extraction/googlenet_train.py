@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""
-@author: hongwei zhang
-@contact: zhanghwei@sjtu.edu.cn
-@file: googlenet_train.py
-@time: 2022/3/8 17:00
-"""
+
 # -*- coding: utf-8 -*-
 # Train and save a CIFAR-10 classifier using a simplified GoogLeNet-like architecture
 
